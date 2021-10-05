@@ -27,6 +27,8 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@CrossOrigin
 @RestController
 @RequestMapping("/generations")
 public class GenerationController {

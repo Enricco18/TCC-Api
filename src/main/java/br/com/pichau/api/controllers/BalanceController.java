@@ -25,6 +25,8 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
+@CrossOrigin
 @RestController
 @RequestMapping("/balance")
 public class BalanceController {
