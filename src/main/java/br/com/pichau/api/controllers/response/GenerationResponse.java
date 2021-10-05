@@ -8,12 +8,12 @@ import java.util.UUID;
 
 public class GenerationResponse {
     private UUID id;
-    private BigDecimal energyGenerated;
+    private BigDecimal energy;
     private LocalDateTime timestamp;
 
     public GenerationResponse(GenerationLog log) {
         this.id = log.getId();
-        this.energyGenerated = log.getEnergyGenerated();
+        this.energy = log.getEnergyGenerated();
         this.timestamp = log.getTimestamp();
     }
 
@@ -21,7 +21,7 @@ public class GenerationResponse {
     public String toString() {
         return "GenerationResponse{" +
                 "id=" + id +
-                ", energyGenerated=" + energyGenerated +
+                ", energy=" + energy +
                 ", timestamp=" + timestamp +
                 '}';
     }
@@ -31,7 +31,7 @@ public class GenerationResponse {
     }
 
     public BigDecimal getEnergyGenerated() {
-        return energyGenerated;
+        return energy;
     }
 
     public LocalDateTime getTimestamp() {

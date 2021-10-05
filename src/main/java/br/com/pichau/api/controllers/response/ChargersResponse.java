@@ -21,7 +21,7 @@ public class ChargersResponse {
     public String toString() {
         return "ChargersResponse{" +
                 "id=" + id +
-                ", energyUsed=" + energyUsed +
+                ", energyUsed=" + energy +
                 ", timestamp=" + timestamp +
                 '}';
     }
