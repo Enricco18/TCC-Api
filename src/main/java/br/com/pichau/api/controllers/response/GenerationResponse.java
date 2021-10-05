@@ -30,7 +30,7 @@ public class GenerationResponse {
         return id;
     }
 
-    public BigDecimal getEnergyGenerated() {
+    public BigDecimal getEnergy() {
         return energy;
     }
 

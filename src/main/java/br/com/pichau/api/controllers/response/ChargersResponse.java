@@ -21,7 +21,7 @@ public class ChargersResponse {
     public String toString() {
         return "ChargersResponse{" +
                 "id=" + id +
-                ", energyUsed=" + energy +
+                ", energy=" + energy +
                 ", timestamp=" + timestamp +
                 '}';
     }
@@ -30,7 +30,7 @@ public class ChargersResponse {
         return id;
     }
 
-    public BigDecimal getEnergyUsed() {
+    public BigDecimal getEnergy() {
         return energy;
     }
 
