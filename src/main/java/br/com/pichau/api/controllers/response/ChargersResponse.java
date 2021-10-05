@@ -8,12 +8,12 @@ import java.util.UUID;
 
 public class ChargersResponse {
     private UUID id;
-    private BigDecimal energyUsed;
+    private BigDecimal energy;
     private LocalDateTime timestamp;
 
     public ChargersResponse(ChargersLog log) {
         this.id = log.getId();
-        this.energyUsed = log.getEnergyUsed().multiply(BigDecimal.valueOf(-1));
+        this.energy = log.getEnergyUsed().multiply(BigDecimal.valueOf(-1));
         this.timestamp = log.getTimestamp();
     }
 
@@ -31,7 +31,7 @@ public class ChargersResponse {
     }
 
     public BigDecimal getEnergyUsed() {
-        return energyUsed;
+        return energy;
     }
 
     public LocalDateTime getTimestamp() {
