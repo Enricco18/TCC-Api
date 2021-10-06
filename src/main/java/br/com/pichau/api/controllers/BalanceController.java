@@ -60,7 +60,7 @@ public class BalanceController {
 
         if(     startTime.isAfter(endTime)||
                 startTime.isAfter(LocalDateTime.now()) ||
-                endTime.isAfter(LocalDateTime.now())
+                endTime.isAfter(LocalDateTime.of(LocalDate.now(),LocalTime.MAX))
         ){
             logger.error(startTime + "|" + endTime + "|" + LocalDateTime.now());
             return ResponseEntity.badRequest().body("Data not valid!");
