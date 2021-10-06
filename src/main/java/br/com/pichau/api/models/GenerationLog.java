@@ -35,7 +35,7 @@ public class GenerationLog implements ChargerDetails{
         return timestamp;
     }
 
-    public BigDecimal getEnergyGenerated() {
+    public BigDecimal getEnergy() {
         return energyGenerated;
     }
 }

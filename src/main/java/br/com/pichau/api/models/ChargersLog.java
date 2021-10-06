@@ -35,7 +35,7 @@ public class ChargersLog implements ChargerDetails{
         return timestamp;
     }
 
-    public BigDecimal getEnergyUsed() {
+    public BigDecimal getEnergy() {
         return energyUsed;
     }
 

@@ -1,8 +1,6 @@
 package br.com.pichau.api.controllers;
 
 import br.com.pichau.api.controllers.response.BalanceSummary;
-import br.com.pichau.api.controllers.response.ChargersResponse;
-import br.com.pichau.api.controllers.response.DayBalance;
 import br.com.pichau.api.models.ChargersLog;
 import br.com.pichau.api.models.GenerationLog;
 import br.com.pichau.api.repositories.ChargesRepository;
@@ -12,7 +10,6 @@ import br.com.pichau.api.utils.enums.Periodicity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +20,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @CrossOrigin
@@ -72,7 +68,7 @@ public class BalanceController {
             negativeList = chargesRepository.findByTimestampBetween(startTime,endTime,Sort.by(Sort.Direction.DESC,"timestamp"));
             negativeList.stream()
                         .forEach(charge ->
-                                        charge.setEnergyUsed(charge.getEnergyUsed().multiply(BigDecimal.valueOf(-1)))
+                                        charge.setEnergyUsed(charge.getEnergy().multiply(BigDecimal.valueOf(-1)))
                                  );
         }
 

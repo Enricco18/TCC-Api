@@ -24,12 +24,12 @@ public class BalanceSummary {
 
         public DetailedSummary(BigDecimal total, GenerationLog log) {
             this.total = total;
-            this.generationTotal = log.getEnergyGenerated();
+            this.generationTotal = log.getEnergy();
             this.details.add(log);
         }
         public DetailedSummary(BigDecimal total, ChargersLog log) {
             this.total = total;
-            this.chargeTotal = log.getEnergyUsed();
+            this.chargeTotal = log.getEnergy();
             this.details.add(log);
         }
 
@@ -54,14 +54,14 @@ public class BalanceSummary {
 
         public void addDetail(GenerationLog log) {
             this.details.add(log);
-            this.total = this.total.add(log.getEnergyGenerated());
-            this.generationTotal =  this.generationTotal.add(log.getEnergyGenerated());
+            this.total = this.total.add(log.getEnergy());
+            this.generationTotal =  this.generationTotal.add(log.getEnergy());
         }
 
         public void addDetail(ChargersLog log) {
             this.details.add(log);
-            this.total = this.total.add(log.getEnergyUsed());
-            this.chargeTotal =  this.chargeTotal.add(log.getEnergyUsed());
+            this.total = this.total.add(log.getEnergy());
+            this.chargeTotal =  this.chargeTotal.add(log.getEnergy());
         }
     }
 
@@ -83,11 +83,11 @@ public class BalanceSummary {
 
     public void addNewDetail(String date, GenerationLog log) {
         DetailedSummary detailedSummary = this.details.get(date);
-        this.total = this.total.add(log.getEnergyGenerated());
-        this.generationTotal = this.total.add(log.getEnergyGenerated());
+        this.total = this.total.add(log.getEnergy());
+        this.generationTotal = this.total.add(log.getEnergy());
 
         if(detailedSummary == null){
-            detailedSummary = new DetailedSummary(log.getEnergyGenerated(),log);
+            detailedSummary = new DetailedSummary(log.getEnergy(),log);
             this.details.put(date, detailedSummary);
             return;
         }
@@ -96,11 +96,11 @@ public class BalanceSummary {
 
     public void addNewDetail(String date, ChargersLog log) {
         DetailedSummary detailedSummary = this.details.get(date);
-        this.total = this.total.add(log.getEnergyUsed());
-        this.chargeTotal = this.chargeTotal.add(log.getEnergyUsed());
+        this.total = this.total.add(log.getEnergy());
+        this.chargeTotal = this.chargeTotal.add(log.getEnergy());
 
         if(detailedSummary == null){
-            detailedSummary = new DetailedSummary(log.getEnergyUsed(),log);
+            detailedSummary = new DetailedSummary(log.getEnergy(),log);
             this.details.put(date, detailedSummary);
             return;
         }

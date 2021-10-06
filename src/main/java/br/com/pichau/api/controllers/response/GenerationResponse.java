@@ -13,7 +13,7 @@ public class GenerationResponse {
 
     public GenerationResponse(GenerationLog log) {
         this.id = log.getId();
-        this.energy = log.getEnergyGenerated();
+        this.energy = log.getEnergy();
         this.timestamp = log.getTimestamp();
     }
 

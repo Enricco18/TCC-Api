@@ -13,7 +13,7 @@ public class ChargersResponse {
 
     public ChargersResponse(ChargersLog log) {
         this.id = log.getId();
-        this.energy = log.getEnergyUsed().multiply(BigDecimal.valueOf(-1));
+        this.energy = log.getEnergy().multiply(BigDecimal.valueOf(-1));
         this.timestamp = log.getTimestamp();
     }
 
