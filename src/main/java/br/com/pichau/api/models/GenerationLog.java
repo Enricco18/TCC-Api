@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-public class GenerationLog {
+public class GenerationLog implements ChargerDetails{
     @Id
     @GeneratedValue
     @Type(type = "uuid-char")

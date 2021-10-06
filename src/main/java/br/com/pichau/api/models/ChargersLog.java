@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-public class ChargersLog {
+public class ChargersLog implements ChargerDetails{
     @Id
     @GeneratedValue
     @Type(type = "uuid-char")
@@ -37,5 +37,9 @@ public class ChargersLog {
 
     public BigDecimal getEnergyUsed() {
         return energyUsed;
+    }
+
+    public void setEnergyUsed(BigDecimal energyUsed) {
+        this.energyUsed = energyUsed;
     }
 }

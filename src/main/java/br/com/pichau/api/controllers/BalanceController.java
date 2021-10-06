@@ -3,7 +3,8 @@ package br.com.pichau.api.controllers;
 import br.com.pichau.api.controllers.response.BalanceSummary;
 import br.com.pichau.api.controllers.response.ChargersResponse;
 import br.com.pichau.api.controllers.response.DayBalance;
-import br.com.pichau.api.controllers.response.GenerationResponse;
+import br.com.pichau.api.models.ChargersLog;
+import br.com.pichau.api.models.GenerationLog;
 import br.com.pichau.api.repositories.ChargesRepository;
 import br.com.pichau.api.repositories.GenerationRepository;
 import br.com.pichau.api.utils.enums.FilterBalance;
@@ -11,6 +12,8 @@ import br.com.pichau.api.utils.enums.Periodicity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,32 +44,51 @@ public class BalanceController {
                                         @RequestParam(value = "by",required = false, defaultValue = "none") Periodicity periodicity
                                         ){
 
-        LocalDateTime startTime = LocalDateTime.of(start, LocalTime.MIN);
-        LocalDateTime endTime = LocalDateTime.of(end,LocalTime.MAX);
+        LocalDateTime startTime;
+        LocalDateTime endTime;
+        if(start==null){
+             startTime = LocalDateTime.of(LocalDate.MIN,LocalTime.MAX);
+        }else{
+            startTime =  LocalDateTime.of(start, LocalTime.MIN);
+        }
 
-        List<DayBalance> positiveList = new ArrayList<>();
-        List<DayBalance> negativeList = new ArrayList<>();
-        List<DayBalance> sumList = new ArrayList<>();
+        if(end==null){
+            endTime= LocalDateTime.of(LocalDate.now(),LocalTime.MAX);
+        }else {
+            endTime   = LocalDateTime.of(end, LocalTime.MAX);
+        }
+
+        if(     startTime.isAfter(endTime)||
+                startTime.isAfter(LocalDateTime.now()) ||
+                endTime.isAfter(LocalDateTime.now())
+        ){
+            logger.error(startTime + "|" + endTime + "|" + LocalDateTime.now());
+            return ResponseEntity.badRequest().body("Data not valid!");
+        }
+
+        List<GenerationLog> positiveList = new ArrayList<>();
+        List<ChargersLog> negativeList = new ArrayList<>();
         if(filter != FilterBalance.generation){
-            negativeList = chargesRepository.findDayBalance(startTime,endTime).stream().map((dayBalance -> {
-                dayBalance.setBalance(dayBalance.getBalance().multiply(BigDecimal.valueOf(-1)));
-                return dayBalance;
-            })).collect(Collectors.toList());
+            negativeList = chargesRepository.findByTimestampBetween(startTime,endTime,Sort.by(Sort.Direction.DESC,"timestamp"));
+            negativeList.stream()
+                        .forEach(charge ->
+                                        charge.setEnergyUsed(charge.getEnergyUsed().multiply(BigDecimal.valueOf(-1)))
+                                 );
         }
 
         if(filter != FilterBalance.charge){
-            positiveList= generationRepository.findDayBalance(startTime,endTime);
+            positiveList= generationRepository.findByTimestampBetween(startTime,endTime, Sort.by(Sort.Direction.DESC,"timestamp"));
         }
-
-        sumList.addAll(negativeList);
-        sumList.addAll(positiveList);
 
         BalanceSummary summary = new BalanceSummary();
-        for(DayBalance dayBalance:sumList){
-            String groupBy = periodicity.getGroupByName(dayBalance.getDate());
-            summary.addNewDetail(groupBy,dayBalance);
+        for(GenerationLog generations:positiveList){
+            String groupBy = periodicity.getGroupByName(generations.getTimestamp().toLocalDate());
+            summary.addNewDetail(groupBy,generations);
         }
-
+        for(ChargersLog chargersLog:negativeList){
+            String groupBy = periodicity.getGroupByName(chargersLog.getTimestamp().toLocalDate());
+            summary.addNewDetail(groupBy,chargersLog);
+        }
         return ResponseEntity.ok(summary);
     }
 }
