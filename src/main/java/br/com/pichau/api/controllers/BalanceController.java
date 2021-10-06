@@ -38,8 +38,8 @@ public class BalanceController {
     private GenerationRepository generationRepository;
 
     @GetMapping
-    public ResponseEntity<?> getBalance(@RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
-                                        @RequestParam("end")   @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
+    public ResponseEntity<?> getBalance(@RequestParam(value = "start",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
+                                        @RequestParam(value ="end",required = false)   @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
                                         @RequestParam(value = "filter",required = false, defaultValue = "both") FilterBalance filter,
                                         @RequestParam(value = "by",required = false, defaultValue = "none") Periodicity periodicity
                                         ){
