@@ -38,4 +38,12 @@ public class GenerationLog implements ChargerDetails{
     public BigDecimal getEnergy() {
         return energyGenerated;
     }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setEnergyGenerated(BigDecimal energyGenerated) {
+        this.energyGenerated = energyGenerated;
+    }
 }

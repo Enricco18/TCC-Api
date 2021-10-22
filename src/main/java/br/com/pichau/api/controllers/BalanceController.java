@@ -33,11 +33,15 @@ public class BalanceController {
     @Autowired
     private GenerationRepository generationRepository;
 
+    //Tirar depois do eureka
+    private Double energyPrice = 2.6;
+
     @GetMapping
     public ResponseEntity<?> getBalance(@RequestParam(value = "start",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
                                         @RequestParam(value ="end",required = false)   @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
                                         @RequestParam(value = "filter",required = false, defaultValue = "both") FilterBalance filter,
-                                        @RequestParam(value = "by",required = false, defaultValue = "none") Periodicity periodicity
+                                        @RequestParam(value = "by",required = false, defaultValue = "none") Periodicity periodicity,
+                                        @RequestParam(value = "finance",required = false, defaultValue = "false") Boolean finance
                                         ){
 
         LocalDateTime startTime;
@@ -66,14 +70,28 @@ public class BalanceController {
         List<ChargersLog> negativeList = new ArrayList<>();
         if(filter != FilterBalance.generation){
             negativeList = chargesRepository.findByTimestampBetween(startTime,endTime,Sort.by(Sort.Direction.DESC,"timestamp"));
-            negativeList.stream()
+            if(finance){
+                negativeList.stream()
                         .forEach(charge ->
-                                        charge.setEnergyUsed(charge.getEnergy().multiply(BigDecimal.valueOf(-1)))
-                                 );
+                                charge.setEnergyUsed(charge.getEnergy().multiply(BigDecimal.valueOf(-1*energyPrice)))
+                        );
+            }else{
+                negativeList.stream()
+                        .forEach(charge ->
+                                charge.setEnergyUsed(charge.getEnergy().multiply(BigDecimal.valueOf(-1)))
+                        );
+            }
         }
 
         if(filter != FilterBalance.charge){
             positiveList= generationRepository.findByTimestampBetween(startTime,endTime, Sort.by(Sort.Direction.DESC,"timestamp"));
+            //tirar essa parte depois do eureka
+            if(finance){
+                positiveList.stream()
+                        .forEach(charge ->
+                                charge.setEnergyGenerated(charge.getEnergy().multiply(BigDecimal.valueOf(energyPrice)))
+                        );
+            }
         }
 
         BalanceSummary summary = new BalanceSummary();
