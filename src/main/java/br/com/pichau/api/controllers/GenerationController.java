@@ -8,6 +8,7 @@ import br.com.pichau.api.models.ChargersLog;
 import br.com.pichau.api.models.GenerationLog;
 import br.com.pichau.api.repositories.GenerationRepository;
 import br.com.pichau.api.utils.enums.Periodicity;
+import br.com.pichau.api.utils.httpClient.Way2API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,8 @@ public class GenerationController {
 
     @Autowired
     private GenerationRepository generationRepository;
+    @Autowired
+    private Way2API api;
 
     @GetMapping
     public ResponseEntity<?> getGenerations(@RequestParam(value ="start",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
@@ -74,7 +77,7 @@ public class GenerationController {
 
     @PostMapping
     public ResponseEntity<?> postGeneration(@RequestBody @Valid GenerationRequest request){
-        GenerationLog newCharge = request.toModel();
+        GenerationLog newCharge = request.toModel(api);
 
         generationRepository.save(newCharge);
 

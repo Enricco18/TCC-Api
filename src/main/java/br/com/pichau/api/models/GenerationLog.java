@@ -17,14 +17,16 @@ public class GenerationLog implements ChargerDetails{
     private UUID id;
     private LocalDateTime timestamp;
     private BigDecimal energyGenerated;
+    private BigDecimal energyCost;
 
     private GenerationLog() {
     }
 
-    public GenerationLog(LocalDateTime timestamp, BigDecimal energyGenerated) {
+    public GenerationLog(LocalDateTime timestamp, BigDecimal energyGenerated, BigDecimal energyCost) {
         this.id = UUID.randomUUID();
         this.timestamp = timestamp;
         this.energyGenerated = energyGenerated;
+        this.energyCost = energyCost;
     }
 
     public UUID getId() {
@@ -37,6 +39,11 @@ public class GenerationLog implements ChargerDetails{
 
     public BigDecimal getEnergy() {
         return energyGenerated;
+    }
+
+    @Override
+    public BigDecimal getEnergyCost() {
+        return energyCost;
     }
 
     public void setTimestamp(LocalDateTime timestamp) {

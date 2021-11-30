@@ -6,6 +6,7 @@ import br.com.pichau.api.controllers.response.GenerationResponse;
 import br.com.pichau.api.models.ChargersLog;
 import br.com.pichau.api.repositories.ChargesRepository;
 import br.com.pichau.api.utils.enums.Periodicity;
+import br.com.pichau.api.utils.httpClient.Way2API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class ChargesController {
 
     @Autowired
     private ChargesRepository chargesRepository;
+    @Autowired
+    private Way2API api;
 
     @GetMapping
     public ResponseEntity<?> getChargers(@RequestParam(value ="start",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
@@ -72,7 +75,7 @@ public class ChargesController {
 
     @PostMapping
     public ResponseEntity<?> postChargers(@RequestBody @Valid ChargesRequest request){
-        ChargersLog newCharge = request.toModel();
+        ChargersLog newCharge = request.toModel(api);
 
         chargesRepository.save(newCharge);
 

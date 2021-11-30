@@ -20,21 +20,33 @@ public class BalanceSummary {
         private BigDecimal total;
         private BigDecimal generationTotal = BigDecimal.ZERO;
         private BigDecimal chargeTotal = BigDecimal.ZERO;
+        private BigDecimal generationTotalMoney = BigDecimal.ZERO;
+        private BigDecimal chargeTotalMoney = BigDecimal.ZERO;
         private List<ChargerDetails> details = new ArrayList<>();
 
         public DetailedSummary(BigDecimal total, GenerationLog log) {
             this.total = total;
             this.generationTotal = log.getEnergy();
+            this.generationTotalMoney = log.getEnergyCost();
             this.details.add(log);
         }
         public DetailedSummary(BigDecimal total, ChargersLog log) {
             this.total = total;
-            this.chargeTotal = log.getEnergy();
+            this.chargeTotal = log.getEnergy().multiply(BigDecimal.valueOf(-1));
+            this.chargeTotalMoney = log.getEnergyCost().multiply(BigDecimal.valueOf(-1));
             this.details.add(log);
         }
 
         public void setTotal(BigDecimal total) {
             this.total = total;
+        }
+
+        public BigDecimal getGenerationTotalMoney() {
+            return generationTotalMoney;
+        }
+
+        public BigDecimal getChargeTotalMoney() {
+            return chargeTotalMoney;
         }
 
         public BigDecimal getTotal() {
@@ -56,12 +68,14 @@ public class BalanceSummary {
             this.details.add(log);
             this.total = this.total.add(log.getEnergy());
             this.generationTotal =  this.generationTotal.add(log.getEnergy());
+            this.generationTotalMoney = log.getEnergyCost();
         }
 
         public void addDetail(ChargersLog log) {
             this.details.add(log);
-            this.total = this.total.add(log.getEnergy());
-            this.chargeTotal =  this.chargeTotal.add(log.getEnergy());
+            this.total = this.total.add(log.getEnergy().multiply(BigDecimal.valueOf(-1)));
+            this.chargeTotal =  this.chargeTotal.add(log.getEnergy().multiply(BigDecimal.valueOf(-1)));
+            this.chargeTotalMoney = log.getEnergyCost().multiply(BigDecimal.valueOf(-1));
         }
     }
 
@@ -96,11 +110,11 @@ public class BalanceSummary {
 
     public void addNewDetail(String date, ChargersLog log) {
         DetailedSummary detailedSummary = this.details.get(date);
-        this.total = this.total.add(log.getEnergy());
-        this.chargeTotal = this.chargeTotal.add(log.getEnergy());
+        this.total = this.total.add(log.getEnergy().multiply(BigDecimal.valueOf(-1)));
+        this.chargeTotal = this.chargeTotal.add(log.getEnergy().multiply(BigDecimal.valueOf(-1)));
 
         if(detailedSummary == null){
-            detailedSummary = new DetailedSummary(log.getEnergy(),log);
+            detailedSummary = new DetailedSummary(log.getEnergy().multiply(BigDecimal.valueOf(-1)),log);
             this.details.put(date, detailedSummary);
             return;
         }

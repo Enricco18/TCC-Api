@@ -39,9 +39,7 @@ public class BalanceController {
     @GetMapping
     public ResponseEntity<?> getBalance(@RequestParam(value = "start",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start,
                                         @RequestParam(value ="end",required = false)   @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end,
-                                        @RequestParam(value = "filter",required = false, defaultValue = "both") FilterBalance filter,
-                                        @RequestParam(value = "by",required = false, defaultValue = "none") Periodicity periodicity,
-                                        @RequestParam(value = "finance",required = false, defaultValue = "false") Boolean finance
+                                        @RequestParam(value = "by",required = false, defaultValue = "none") Periodicity periodicity
                                         ){
 
         LocalDateTime startTime;
@@ -66,33 +64,10 @@ public class BalanceController {
             return ResponseEntity.badRequest().body("Data not valid!");
         }
 
-        List<GenerationLog> positiveList = new ArrayList<>();
-        List<ChargersLog> negativeList = new ArrayList<>();
-        if(filter != FilterBalance.generation){
-            negativeList = chargesRepository.findByTimestampBetween(startTime,endTime,Sort.by(Sort.Direction.DESC,"timestamp"));
-            if(finance){
-                negativeList.stream()
-                        .forEach(charge ->
-                                charge.setEnergyUsed(charge.getEnergy().multiply(BigDecimal.valueOf(-1*energyPrice)))
-                        );
-            }else{
-                negativeList.stream()
-                        .forEach(charge ->
-                                charge.setEnergyUsed(charge.getEnergy().multiply(BigDecimal.valueOf(-1)))
-                        );
-            }
-        }
-
-        if(filter != FilterBalance.charge){
-            positiveList= generationRepository.findByTimestampBetween(startTime,endTime, Sort.by(Sort.Direction.DESC,"timestamp"));
-            //tirar essa parte depois do eureka
-            if(finance){
-                positiveList.stream()
-                        .forEach(charge ->
-                                charge.setEnergyGenerated(charge.getEnergy().multiply(BigDecimal.valueOf(energyPrice)))
-                        );
-            }
-        }
+        List<GenerationLog> positiveList;
+        List<ChargersLog> negativeList;
+        negativeList = chargesRepository.findByTimestampBetween(startTime,endTime,Sort.by(Sort.Direction.DESC,"timestamp"));
+        positiveList= generationRepository.findByTimestampBetween(startTime,endTime, Sort.by(Sort.Direction.DESC,"timestamp"));
 
         BalanceSummary summary = new BalanceSummary();
         for(GenerationLog generations:positiveList){

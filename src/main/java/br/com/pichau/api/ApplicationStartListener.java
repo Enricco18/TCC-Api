@@ -37,13 +37,13 @@ public class ApplicationStartListener {
             long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
             LocalDateTime randomDate = LocalDateTime.ofEpochSecond(randomDay,0,ZoneOffset.ofHours(3));
 
-            listCharges.add(new ChargersLog(randomDate, BigDecimal.valueOf(ThreadLocalRandom.current().nextLong(0, 100))));
-            listGeneration.add(new GenerationLog(randomDate,BigDecimal.valueOf(ThreadLocalRandom.current().nextLong(0, 100))));
+            listCharges.add(new ChargersLog(randomDate, BigDecimal.valueOf(ThreadLocalRandom.current().nextLong(0, 100)),BigDecimal.valueOf(ThreadLocalRandom.current().nextLong(0, 100))));
+            listGeneration.add(new GenerationLog(randomDate,BigDecimal.valueOf(ThreadLocalRandom.current().nextLong(0, 100)),BigDecimal.valueOf(ThreadLocalRandom.current().nextLong(0, 100))));
 
             randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
             randomDate = LocalDateTime.ofEpochSecond(randomDay,0,ZoneOffset.ofHours(3));
 
-            listCharges.add(new ChargersLog(randomDate, BigDecimal.valueOf(ThreadLocalRandom.current().nextLong(0, 100))));
+            listCharges.add(new ChargersLog(randomDate, BigDecimal.valueOf(ThreadLocalRandom.current().nextLong(0, 100)),BigDecimal.valueOf(ThreadLocalRandom.current().nextLong(0, 100))));
 
         }
 

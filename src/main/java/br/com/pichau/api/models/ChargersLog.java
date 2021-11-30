@@ -17,14 +17,16 @@ public class ChargersLog implements ChargerDetails{
     private UUID id;
     private LocalDateTime timestamp;
     private BigDecimal energyUsed;
+    private BigDecimal energyCost;
 
     private ChargersLog() {
     }
 
-    public ChargersLog(LocalDateTime timestamp, BigDecimal energyUsed) {
+    public ChargersLog(LocalDateTime timestamp, BigDecimal energyUsed,BigDecimal energyCost) {
         this.id = UUID.randomUUID();
         this.timestamp = timestamp;
         this.energyUsed = energyUsed;
+        this.energyCost = energyCost;
     }
 
     public UUID getId() {
@@ -37,6 +39,11 @@ public class ChargersLog implements ChargerDetails{
 
     public BigDecimal getEnergy() {
         return energyUsed;
+    }
+
+    @Override
+    public BigDecimal getEnergyCost() {
+        return energyCost;
     }
 
     public void setEnergyUsed(BigDecimal energyUsed) {

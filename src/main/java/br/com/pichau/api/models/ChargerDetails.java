@@ -7,4 +7,6 @@ public interface ChargerDetails {
     public LocalDateTime getTimestamp();
 
     public BigDecimal getEnergy();
+
+    public BigDecimal getEnergyCost();
 }
