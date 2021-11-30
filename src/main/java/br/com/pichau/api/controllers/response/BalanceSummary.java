@@ -75,7 +75,7 @@ public class BalanceSummary {
         public void addDetail(GenerationLog log) {
             this.details.add(log);
             this.total = this.total.add(log.getEnergy());
-            this.totalMoney = this.total.add(log.getEnergyCost());
+            this.totalMoney = this.totalMoney.add(log.getEnergyCost());
             this.generationTotal =  this.generationTotal.add(log.getEnergy());
             this.generationTotalMoney = log.getEnergyCost();
         }
@@ -83,7 +83,7 @@ public class BalanceSummary {
         public void addDetail(ChargersLog log) {
             this.details.add(log);
             this.total = this.total.add(log.getEnergy().multiply(BigDecimal.valueOf(-1)));
-            this.totalMoney = this.total.add(log.getEnergyCost().multiply(BigDecimal.valueOf(-1)));
+            this.totalMoney = this.totalMoney.add(log.getEnergyCost().multiply(BigDecimal.valueOf(-1)));
             this.chargeTotal =  this.chargeTotal.add(log.getEnergy().multiply(BigDecimal.valueOf(-1)));
             this.chargeTotalMoney = log.getEnergyCost().multiply(BigDecimal.valueOf(-1));
         }
